@@ -13,12 +13,12 @@ export const getCategories = () =>
 export const getCategoryPosts = (category) =>
   fetch(`${baseURL}/${category}/posts`, { headers })
     .then(res => res.json())
-    .then(data => data.posts)
+    .then(data => data)
 
 export const getPosts = () =>
   fetch(`${baseURL}/posts`, { headers })
     .then(res => res.json())
-    .then(data => data.posts);
+    .then(data => data);
 
 export const addPost = (post) =>
   fetch(`${baseURL}/posts`, {
@@ -34,7 +34,7 @@ export const addPost = (post) =>
 export const getPostDetail = (postId) =>
   fetch(`${baseURL}/posts/${postId}`, { headers })
     .then(res => res.json())
-    .then(data => data.post);
+    .then(data => data);
 
 export const votePost = (post, vote) =>
   fetch(`${baseURL}/posts/${post.id}`, {
@@ -66,9 +66,9 @@ export const deletePost = (post) =>
     .then(res => res.json());
 
 export const getPostComments = (post) =>
-  fetch(`${baseURL}/posts/${postId}/comments`, { headers })
+  fetch(`${baseURL}/posts/${post.id}/comments`, { headers })
     .then(res => res.json())
-    .then(data => data.comments);
+    .then(data => data);
 
 export const addComment = (comment) =>
   fetch(`${baseURL}/comments`, {
@@ -78,5 +78,39 @@ export const addComment = (comment) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(comment)
+  })
+    .then(res => res.json());
+
+export const getComment = (commentID) =>
+  fetch(`${baseURL}/comments/${commentID}`, { headers })
+    .then(res => res.json())
+    .then(data => data);
+
+export const voteComment = (comment, vote) =>
+  fetch(`${baseURL}/comments/${comment.id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ option: vote })
+  })
+    .then(res => res.json());
+
+export const editComment = (comment, timestamp, body) =>
+  fetch(`${baseURL}/comments/${comment.id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({timestamp, body})
+  })
+    .then(res => res.json());
+
+export const deleteComment = (comment) =>
+  fetch(`${baseURL}/comments/${comment.id}`, {
+    method: 'DELETE',
+    headers: headers,
   })
     .then(res => res.json());

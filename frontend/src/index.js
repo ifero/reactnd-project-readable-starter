@@ -1,6 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ReadableApp from './App'
-import { BrowserRouter } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReadableApp from './App';
+import { Provider } from 'react-redux';
+import store from './storage';
 
-ReactDOM.render(<BrowserRouter><ReadableApp /></BrowserRouter>, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <ReadableApp />
+  </Provider>,
+  document.getElementById('root'));
