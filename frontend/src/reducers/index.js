@@ -1,7 +1,8 @@
 import { Map } from 'immutable';
 import {
   SET_CATEGORIES,
-  SAVE_ALL_POSTS
+  SAVE_ALL_POSTS,
+  SET_POST_DETAIL
 } from '../actions'
 
 const initialCategoriesState = Map({
@@ -31,6 +32,11 @@ export function postsReducer (state = initialPostsState, action) {
         ...state,
         posts: action.posts,
       };
+    case SET_POST_DETAIL:
+      return {
+        ...state,
+        post: action.post,
+      }
     default:
       return state
   }
