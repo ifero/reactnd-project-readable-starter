@@ -47,8 +47,8 @@ export const votePost = (post, vote) =>
   })
     .then(res => res.json());
 
-export const editPost = (post, title, body) =>
-  fetch(`${baseURL}/posts/${post.id}`, {
+export const editPost = (post_id, title, body) =>
+  fetch(`${baseURL}/posts/${post_id}`, {
     method: 'PUT',
     headers: {
       ...headers,
@@ -65,8 +65,8 @@ export const deletePost = (post) =>
   })
     .then(res => res.json());
 
-export const getPostComments = (post) =>
-  fetch(`${baseURL}/posts/${post.id}/comments`, { headers })
+export const getPostComments = (post_id) =>
+  fetch(`${baseURL}/posts/${post_id}/comments`, { headers })
     .then(res => res.json())
     .then(data => data);
 

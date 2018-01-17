@@ -2,7 +2,10 @@ import { Map } from 'immutable';
 import {
   SET_CATEGORIES,
   SAVE_ALL_POSTS,
-  SET_POST_DETAIL
+  SET_POST_DETAIL,
+  SAVE_EDITED_POST,
+  SAVE_NEW_POST,
+
 } from '../actions'
 
 const initialCategoriesState = Map({
@@ -23,6 +26,8 @@ export function categoriesReducer (state = initialCategoriesState, action) {
 
 const initialPostsState = Map({
   posts: [],
+  comments: [],
+  post: {},
 });
 
 export function postsReducer (state = initialPostsState, action) {
@@ -36,7 +41,18 @@ export function postsReducer (state = initialPostsState, action) {
       return {
         ...state,
         post: action.post,
-      }
+        comments: action.comments,
+      };
+    case SAVE_EDITED_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post.id !== action.post.id).concat([action.post]),
+      };
+    case SAVE_NEW_POST:
+      return {
+        ...state,
+        posts: state.posts.concat([action.post]),
+      };
     default:
       return state
   }

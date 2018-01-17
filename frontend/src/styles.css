@@ -11,3 +11,57 @@
     border-style: dashed;
     margin-bottom: 20px;
 }
+
+.modal {
+    position: absolute;
+    top: 40px;
+    left: 200px;
+    right: 200px;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.24), 0 3px 12px 0 rgba(0,0,0,.12);
+    min-width: 500px;
+}
+
+.formContainer {
+    flex: 1;
+    flex-direction: column;
+}
+
+.formInput {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    border-radius: 6px;
+
+    display: block;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+
+.inputCategory {
+    margin: 10px 0;
+    display: block;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 20px;
+    height: 20px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.disabled {
+    background: rgb(220, 220, 220);
+}
