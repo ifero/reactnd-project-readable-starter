@@ -58,8 +58,8 @@ export const editPost = (post_id, title, body) =>
   })
     .then(res => res.json());
 
-export const deletePost = (post) =>
-  fetch(`${baseURL}/posts/${post.id}`, {
+export const deletePost = (post_id) =>
+  fetch(`${baseURL}/posts/${post_id}`, {
     method: 'DELETE',
     headers: headers,
   })

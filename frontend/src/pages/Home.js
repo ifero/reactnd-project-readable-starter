@@ -53,7 +53,9 @@ class Home extends React.Component {
           </div>
         ))
         }
-        <div onClick={() => {this.setState({openCreateEditPost: true, isEditingPost: false})}}>NEW</div>
+        <div className={'open-modal'}>
+          <div onClick={() => {this.setState({openCreateEditPost: true, isEditingPost: false})}}>NEW</div>
+        </div>
         <PostModal post={selectedPost} isOpen={openCreateEditPost} onClose={() => this.setState({openCreateEditPost: false})} isEditingPost={isEditingPost} />
       </div>
     )

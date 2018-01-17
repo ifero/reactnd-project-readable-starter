@@ -3,6 +3,25 @@ import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import { editSelectedPost, createPost} from '../actions/index';
 
+const overlay = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.75)'
+  },
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 class PostModal extends React.Component {
   constructor(props){
     super(props);
@@ -14,6 +33,7 @@ class PostModal extends React.Component {
       showErrorMessage: false,
     }
   }
+
 
   checkData() {
     const { title, author, body, category } = this.state;
@@ -57,6 +77,8 @@ class PostModal extends React.Component {
         onRequestClose={onClose}
         contentLabel='Modal'
         shouldCloseOnOverlayClick={true}
+        ariaHideApp={false}
+        style={overlay}
       >
         <div className='formContainer'>
           <label>Title</label>

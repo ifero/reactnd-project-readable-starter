@@ -5,6 +5,7 @@ import {
   SET_POST_DETAIL,
   SAVE_EDITED_POST,
   SAVE_NEW_POST,
+  DELETE_POST
 
 } from '../actions'
 
@@ -52,6 +53,11 @@ export function postsReducer (state = initialPostsState, action) {
       return {
         ...state,
         posts: state.posts.concat([action.post]),
+      };
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post.id !== action.post_id),
       };
     default:
       return state

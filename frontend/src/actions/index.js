@@ -3,7 +3,7 @@ import {
   getPosts,
   getPostDetail,
   editPost,
-  addPost, getPostComments
+  addPost, getPostComments, deletePost
 } from '../utilities/APIAccessor';
 import { generateUUID } from '../utilities/uuid'
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -11,6 +11,7 @@ export const SAVE_ALL_POSTS = 'SAVE_ALL_POSTS';
 export const SET_POST_DETAIL = 'SET_POST_DETAIL';
 export const SAVE_EDITED_POST = 'SAVE_EDITED_POST';
 export const SAVE_NEW_POST = 'SAVE_NEW_POST';
+export const DELETE_POST = 'DELETE_POST';
 
 function setCategories(categories) {
   return {
@@ -45,6 +46,13 @@ function saveNewPost(post) {
   return {
     type: SAVE_NEW_POST,
     post,
+  }
+}
+
+function deleteSelectedPost(post_id) {
+  return {
+    type: DELETE_POST,
+    post_id,
   }
 }
 
@@ -132,4 +140,18 @@ export function createPost(post) {
           reject();
         })
     });
+}
+
+export function removePost(post_id) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+    deletePost(post_id)
+      .then(() => {
+        dispatch(deleteSelectedPost(post_id));
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      })
+    })
 }

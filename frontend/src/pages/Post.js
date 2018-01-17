@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { fetchPostDetail } from "../actions/index";
+import { fetchPostDetail, removePost } from "../actions/index";
+import { push } from 'react-router-redux';
 import moment from 'moment';
 
 class Post extends React.Component {
@@ -9,6 +10,14 @@ class Post extends React.Component {
   componentWillMount() {
     const { id, dispatch } = this.props;
     dispatch(fetchPostDetail(id));
+  }
+
+  deletePost(post_id) {
+    const { dispatch } = this.props;
+    dispatch(removePost(post_id))
+      .then(() => {
+        dispatch(push('/'));
+      })
   }
 
   render (){
@@ -59,7 +68,7 @@ class Post extends React.Component {
             </div>
           </div>
         ))}
-        <div className={'open'} onClick={() => {}}>delete</div>
+        <div className={'open'} onClick={() => {this.deletePost(post.id)}}>delete</div>
       </div>
     )
   }
