@@ -3,9 +3,15 @@ import {connect} from "react-redux";
 import { fetchPostDetail, removePost } from "../actions/index";
 import { push } from 'react-router-redux';
 import moment from 'moment';
+import PostModal from '../components/PostModal';
 
 class Post extends React.Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      openEditPost: false,
+    }
+  }
 
   componentWillMount() {
     const { id, dispatch } = this.props;
@@ -22,8 +28,7 @@ class Post extends React.Component {
 
   render (){
     const { post, comments } = this.props;
-    console.log(post);
-    console.log(comments);
+    const { openEditPost } = this.state;
     return (
       <div className="container">
         DETAILED POST:
@@ -50,6 +55,7 @@ class Post extends React.Component {
             <div className={'postTitle'}>
               {moment.unix(post.timestamp).format("DD/MM/YYYY HH:mm:ss")}
             </div>
+            <div className={'edit'} onClick={() => {this.setState({openEditPost: true})}}>edit</div>
           </div>
         )}
         {comments && comments.map(comment => (
@@ -69,6 +75,7 @@ class Post extends React.Component {
           </div>
         ))}
         <div className={'open'} onClick={() => {this.deletePost(post.id)}}>delete</div>
+        <PostModal post={post} isOpen={openEditPost} onClose={() => this.setState({openEditPost: false})} isEditingPost={true} />
       </div>
     )
   }

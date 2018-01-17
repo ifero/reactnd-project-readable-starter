@@ -46,11 +46,13 @@ class PostModal extends React.Component {
     else {
       if (isEditingPost) {
         dispatch(editSelectedPost(post.id, title, body))
-          .then(() => onClose());
+          .then(() => onClose())
+          .catch(() => console.log("error"));
       }
       else {
         dispatch(createPost({title, body, author, category}))
-          .then(() => onClose());
+          .then(() => onClose())
+          .catch(() => console.log("error"));
       }
     }
   }
