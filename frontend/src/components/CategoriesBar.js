@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { fetchCategories } from "../actions/index";
 import {Link} from "react-router-dom";
+import FaHome from 'react-icons/lib/fa/home';
 
 class CategoriesBar extends React.Component {
 
@@ -13,9 +14,10 @@ class CategoriesBar extends React.Component {
   render (){
     const { categories } = this.props;
     return (
-      <div>
+      <div >
+        <Link to={'/'} ><FaHome size={24}/></Link>
       {categories && categories.map(category => (
-        <ul className="category" key={category.path}><Link to={`/${category.path}`} >{category.name}</Link></ul>
+        <Link className={'category'} key={category.path} to={`/${category.path}`} >{category.name}</Link>
       ))}
       </div>
     )

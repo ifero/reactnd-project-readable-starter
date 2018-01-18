@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import {removeComment, voteSelectedComment} from '../actions/index';
 import FaAngleUp from 'react-icons/lib/fa/angle-up';
 import FaAngleDown from 'react-icons/lib/fa/angle-down';
+import FaTrashO from 'react-icons/lib/fa/trash-o';
+import FaEdit from 'react-icons/lib/fa/edit';
+import FaUser from 'react-icons/lib/fa/user';
+import FaQuoteLeft from 'react-icons/lib/fa/quote-left';
+import FaQuoteRight from 'react-icons/lib/fa/quote-right';
 
 class Comment extends React.Component {
 
@@ -26,18 +31,24 @@ class Comment extends React.Component {
         key={comment.id}
       >
         <div className={'comment-content'}>
-          <div className={'postTitle'}>
-            {comment.body}
+          <div>
+            <FaQuoteLeft/> {comment.body} <FaQuoteRight/>
           </div>
-          <div className={'postTitle'}>
-            {comment.author}
+          <div>
+            <FaUser/>{comment.author}
           </div>
-          <div className={'postTitle'}>
+          <div>
             {moment(comment.timestamp).format("DD/MM/YYYY HH:mm:ss")}
           </div>
         </div>
         <div className={'vote-buttons'}>
-          {onEdit && (<div className={'edit'} onClick={onEdit}>edit</div>)}
+          {onEdit && (
+            <button
+              className={'icon-btn'}
+              onClick={onEdit}
+            >
+              edit <FaEdit/>
+            </button>)}
           <button
             className={'icon-btn'}
             onClick={() => this.voteComment('upVote')}
@@ -53,7 +64,12 @@ class Comment extends React.Component {
           >
             <FaAngleDown size={24}/>
           </button>
-          <div className={'delete'} onClick={() => this.deleteComment()}>delete</div>
+          <button
+            className={'icon-btn'}
+            onClick={() => this.deleteComment()}
+          >
+            <FaTrashO size={18}/>
+          </button>
         </div>
       </div>
     )

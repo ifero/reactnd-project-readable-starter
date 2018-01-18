@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
 import { fetchPosts } from "../actions/index";
-import CategoriesBar from "../components/CategoriesBar";
 import { push } from "react-router-redux";
 import PostModal from "../components/PostModal";
 import PostElement from "../components/PostElement";
@@ -25,7 +24,6 @@ class Home extends React.Component {
     const { openCreatePost, sortByDate } = this.state;
     return (
       <div>
-      <CategoriesBar ></CategoriesBar>
         All Posts ordered by
         <select default={'timestamp'} onChange={e => this.setState({sortByDate: e.target.value === 'timestamp'})}>
           <option value={'timestamp'} label={'time'} />

@@ -77,6 +77,10 @@ export function postsReducer (state = initialPostsState, action) {
       return {
         ...state,
         comments: state.comments.concat([action.comment]),
+        post: {
+          ...state.post,
+          commentCount: state.post.commentCount + 1,
+        }
       };
     default:
       return state

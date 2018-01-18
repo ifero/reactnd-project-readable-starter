@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import {Route} from "react-router";
 import "./styles.css"
 import Post from "./pages/Post";
+import CategoriesBar from "./components/CategoriesBar";
 
 
 const reducer = combineReducers({
@@ -29,6 +30,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div className="container">
+        <CategoriesBar ></CategoriesBar>
         <Route exact path="/" component={Home}/>
         <Route exact path="/:category" component={Home} />
         <Route path="/:category/:post_id" component={Post} />
