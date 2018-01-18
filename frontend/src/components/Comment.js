@@ -3,6 +3,8 @@ import moment from "moment";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {removeComment, voteSelectedComment} from '../actions/index';
+import FaAngleUp from 'react-icons/lib/fa/angle-up';
+import FaAngleDown from 'react-icons/lib/fa/angle-down';
 
 class Comment extends React.Component {
 
@@ -20,25 +22,39 @@ class Comment extends React.Component {
     const { comment, onEdit } = this.props;
     return (
       <div
-        className={'post'}
+        className={'comment'}
         key={comment.id}
       >
-        <div className={'postTitle'}>
-          {comment.body}
+        <div className={'comment-content'}>
+          <div className={'postTitle'}>
+            {comment.body}
+          </div>
+          <div className={'postTitle'}>
+            {comment.author}
+          </div>
+          <div className={'postTitle'}>
+            {moment(comment.timestamp).format("DD/MM/YYYY HH:mm:ss")}
+          </div>
         </div>
-        <div className={'postTitle'}>
-          {comment.author}
+        <div className={'vote-buttons'}>
+          {onEdit && (<div className={'edit'} onClick={onEdit}>edit</div>)}
+          <button
+            className={'icon-btn'}
+            onClick={() => this.voteComment('upVote')}
+          >
+            <FaAngleUp size={24}/>
+          </button>
+          <div className={'postTitle'}>
+            {comment.voteScore}
+          </div>
+          <button
+            className={'icon-btn'}
+            onClick={() => this.voteComment('downVote')}
+          >
+            <FaAngleDown size={24}/>
+          </button>
+          <div className={'delete'} onClick={() => this.deleteComment()}>delete</div>
         </div>
-        <div className={'postTitle'}>
-          {moment(comment.timestamp).format("DD/MM/YYYY HH:mm:ss")}
-        </div>
-        <div className={'postTitle'}>
-          {comment.voteScore}
-        </div>
-        {onEdit && (<div className={'edit'} onClick={onEdit}>edit</div>)}
-        <div className={'edit'} onClick={() => this.voteComment('upVote')}>UP</div>
-        <div className={'edit'} onClick={() => this.voteComment('downVote')}>DOWN</div>
-        <div className={'delete'} onClick={() => this.deleteComment()}>delete</div>
       </div>
     )
   }

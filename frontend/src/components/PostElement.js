@@ -3,6 +3,8 @@ import moment from "moment";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { voteSelectedPost } from '../actions/index';
+import FaAngleUp from 'react-icons/lib/fa/angle-up';
+import FaAngleDown from 'react-icons/lib/fa/angle-down';
 
 class PostElement extends React.Component {
 
@@ -12,37 +14,52 @@ class PostElement extends React.Component {
   }
 
   render() {
-    const {post, onEdit, onDetail } = this.props;
+    const {post, onEdit, onDetail, onDelete } = this.props;
     return (
       <div
         className={'post'}
         key={post.id}
       >
-        <div className={'postTitle'}>
-          {post.category}
+        <div className={'comment-content'}>
+          <div className={'postTitle'}>
+            category: {post.category}
+          </div>
+          <div className={'postTitle'}>
+            title: {post.title}
+          </div>
+          <div className={'postTitle'}>
+            content: {post.body}
+          </div>
+          <div className={'postTitle'}>
+            author: {post.author}
+          </div>
+          <div className={'postTitle'}>
+            {moment(post.timestamp).format("DD/MM/YYYY HH:mm:ss")}
+          </div>
+          <div className={'postTitle'}>
+            comments: {post.commentCount}
+          </div>
         </div>
-        <div className={'postTitle'}>
-          {post.title}
+        <div className={'vote-buttons'}>
+          {onEdit && (<div className={'edit'} onClick={onEdit}>edit</div>)}
+          <button
+            className={'icon-btn'}
+            onClick={() => this.votePost('upVote')}
+          >
+            <FaAngleUp size={24}/>
+          </button>
+          <div className={'postTitle'}>
+            {post.voteScore}
+          </div>
+          <button
+            className={'icon-btn'}
+            onClick={() => this.votePost('downVote')}
+          >
+            <FaAngleDown size={24}/>
+          </button>
+          {onDetail && (<div className={'open'} onClick={onDetail}>detail</div>)}
+          {onDelete && (<div className={'open'} onClick={onDelete}>delete</div>)}
         </div>
-        <div className={'postTitle'}>
-          {post.body}
-        </div>
-        <div className={'postTitle'}>
-          {post.author}
-        </div>
-        <div className={'postTitle'}>
-          {moment(post.timestamp).format("DD/MM/YYYY HH:mm:ss")}
-        </div>
-        <div className={'postTitle'}>
-          {post.voteScore}
-        </div>
-        <div className={'postTitle'}>
-          {post.commentCount}
-        </div>
-        {onEdit && (<div className={'edit'} onClick={onEdit}>edit</div>)}
-        {onDetail && (<div className={'open'} onClick={onDetail}>detail</div>)}
-        <div className={'edit'} onClick={() => this.votePost('upVote')}>UP</div>
-        <div className={'edit'} onClick={() => this.votePost('downVote')}>DOWN</div>
       </div>
     )
   }

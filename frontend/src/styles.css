@@ -6,10 +6,16 @@
 
 .post {
     flex: 1;
-    border-width: 1;
-    border-color: black;
-    border-style: dashed;
+    background-color: gainsboro;
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-direction: row; /* Safari 6.1+ */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+    padding: 20px;
     margin-bottom: 20px;
+    border-radius: 20px;
 }
 
 .modal {
@@ -81,4 +87,70 @@
     background-size: 28px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     font-size: 0;
+}
+
+.newComment {
+    background-color: beige;
+    padding: 20px;
+
+}
+
+.submitInput {
+    margin: 20px auto;
+    width: 100px;
+    border-radius: 6px;
+
+    display: block;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+
+.formInput {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    border-radius: 6px;
+
+    display: block;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+
+.comment {
+    flex: 1;
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-direction: row; /* Safari 6.1+ */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    margin-bottom: 20px;
+}
+
+.comment-content {
+    flex: 1;
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-direction: column; /* Safari 6.1+ */
+    display: flex;
+    flex-direction: column;
+}
+
+.vote-buttons {
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-direction: column; /* Safari 6.1+ */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    align-items: center;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
 }

@@ -9,7 +9,8 @@ import {
   votePost,
   voteComment,
   addComment,
-  deleteComment
+  deleteComment,
+  editComment
 } from '../utilities/APIAccessor';
 import { generateUUID } from '../utilities/uuid'
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -239,6 +240,20 @@ export function removeComment(comment_id) {
       deleteComment(comment_id)
         .then(() => {
           dispatch(deleteSelectedComment(comment_id));
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        })
+    })
+}
+
+export function editSelectedComment(comment_id, body) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      editComment(comment_id, Date.now(), body)
+        .then(comment => {
+          dispatch(saveEditedComment(comment));
           resolve();
         })
         .catch(() => {

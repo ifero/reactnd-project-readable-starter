@@ -38,12 +38,12 @@ class PostModal extends React.Component {
   checkData() {
     const { title, author, body, category } = this.state;
     const { onClose, dispatch, isEditingPost, post } = this.props;
-    console.log(`${title}, ${author}, ${body}, ${category}`);
     if (title.length === 0 || author.length === 0
       || body.length === 0 || category.length === 0) {
       this.setState({showErrorMessage: true});
     }
     else {
+      this.setState({showErrorMessage: false});
       if (isEditingPost) {
         dispatch(editSelectedPost(post.id, title, body))
           .then(() => onClose())

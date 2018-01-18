@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { fetchPostDetail, removePost } from "../actions/index";
+import { fetchPostDetail, removePost, createComment, editSelectedComment } from "../actions/index";
 import { push } from 'react-router-redux';
 import PostModal from '../components/PostModal';
 import PostElement from '../components/PostElement';
@@ -13,6 +13,9 @@ class Post extends React.Component {
       openEditPost: false,
       body: '',
       author: '',
+      editComment: false,
+      showErrorMessage: false,
+      comment_id: '',
     }
   }
 
@@ -29,36 +32,81 @@ class Post extends React.Component {
       })
   }
 
+  clearInputs() {
+    this.setState({body: '', author: '', editComment: false, comment_id: ''});
+  }
+
+  saveComment() {
+    const { editComment, body, author, comment_id } = this.state;
+    const { dispatch, post } = this.props;
+    if (author.length === 0 || body.length === 0) {
+      this.setState({showErrorMessage: true});
+    }
+    else {
+      this.setState({showErrorMessage: false});
+      if (editComment) {
+        dispatch(editSelectedComment(comment_id, body))
+          .then(() => this.clearInputs())
+          .catch(() => console.log("error"));
+      }
+      else {
+        dispatch(createComment(post.id, {body, author}))
+          .then(() => this.clearInputs())
+          .catch(() => console.log("error"));
+      }
+    }
+  }
+
+  editCommentMode(comment) {
+    this.setState({body: comment.body, author: comment.author, editComment: true, comment_id: comment.id});
+  }
+
   render (){
     const { post, comments } = this.props;
-    const { openEditPost, body, author } = this.state;
+    const { openEditPost, body, author, editComment, showErrorMessage } = this.state;
     return (
       <div className="container">
-        <div className={'open'} onClick={() => {this.deletePost(post.id)}}>delete</div>
-        DETAILED POST:
         {post && (
-          <PostElement key={post.id} post={post} onEdit={() => {this.setState({openEditPost: true})}} />
+          <PostElement
+            key={post.id}
+            post={post}
+            onEdit={() => {this.setState({openEditPost: true})}}
+            onDelete={() => {this.deletePost(post.id)}}
+          />
         )}
         {comments.length !== 0 ? 'COMMENTS:' : 'Be the first to add a comment...'}
         {comments && comments.sort((a , b) => {
-          return b.timestamp - a.timestamp;
+          return a.timestamp - b.timestamp;
         } ).map(comment => (
-          <Comment key={comment.id} comment={comment} onEdit={() => console.log("edit")} />
+          <Comment key={comment.id} comment={comment} onEdit={() => this.editCommentMode(comment)} />
         ))}
-        <label>Body</label>
-        <input
-          className="formInput"
-          type={'text'}
-          value={body}
-          onChange={(e) => this.setState({body: e.target.value})}
-        />
-        <input
-          className={`formInput ${false ? 'disabled' : ''}`}
-          type={'text'}
-          value={author}
-          onChange={(e) => this.setState({author: e.target.value})}
-          disabled={false}
-        />
+        <div className={'newComment'}>
+          <label>comment:</label>
+          <textarea
+            placeholder={'Type in your comment'}
+            className="formInput"
+            type={'text'}
+            value={body}
+            onChange={(e) => this.setState({body: e.target.value})}
+          />
+          <label>author:</label>
+          <input
+            placeholder={'Type in your nickname'}
+            className={`formInput ${editComment ? 'disabled' : ''}`}
+            type={'text'}
+            value={author}
+            onChange={(e) => this.setState({author: e.target.value})}
+            disabled={editComment}
+          />
+          <input
+            className="submitInput"
+            type={'submit'}
+            onClick={() => this.saveComment()}
+          />
+          <div className={`errorMessage ${showErrorMessage ? '' : 'hide'}`}>
+            <label>Some params are missing</label>
+          </div>
+        </div>
         <PostModal post={post} isOpen={openEditPost} onClose={() => this.setState({openEditPost: false})} isEditingPost={true} />
       </div>
     )

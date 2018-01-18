@@ -4,10 +4,12 @@ import {
   SET_POST_DETAIL,
   SAVE_EDITED_POST,
   SAVE_NEW_POST,
-  DELETE_POST
+  DELETE_POST,
+  SAVE_EDITED_COMMENT,
+  DELETE_COMMENT,
+  ADD_COMMENT
 
 } from '../actions'
-import {DELETE_COMMENT, SAVE_EDITED_COMMENT} from "../actions/index";
 
 const initialCategoriesState = {
   categories: [],
@@ -46,8 +48,6 @@ export function postsReducer (state = initialPostsState, action) {
       };
     case SAVE_EDITED_POST:
       const posts = state.posts;
-      console.log("posts",posts);
-      console.log("post",action.post);
       return {
         ...state,
         posts: posts.filter(post => post.id !== action.post.id).concat([action.post]),
@@ -71,7 +71,12 @@ export function postsReducer (state = initialPostsState, action) {
     case DELETE_COMMENT:
       return {
         ...state,
-        comment: state.comments.filter(comment => comment.id !== action.comment_id),
+        comments: state.comments.filter(comment => comment.id !== action.comment_id),
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.concat([action.comment]),
       };
     default:
       return state

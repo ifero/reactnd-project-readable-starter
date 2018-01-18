@@ -97,8 +97,8 @@ export const voteComment = (comment_id, vote) =>
   })
     .then(res => res.json());
 
-export const editComment = (comment, timestamp, body) =>
-  fetch(`${baseURL}/comments/${comment.id}`, {
+export const editComment = (comment_id, timestamp, body) =>
+  fetch(`${baseURL}/comments/${comment_id}`, {
     method: 'PUT',
     headers: {
       ...headers,
@@ -108,8 +108,8 @@ export const editComment = (comment, timestamp, body) =>
   })
     .then(res => res.json());
 
-export const deleteComment = (comment) =>
-  fetch(`${baseURL}/comments/${comment.id}`, {
+export const deleteComment = (comment_id) =>
+  fetch(`${baseURL}/comments/${comment_id}`, {
     method: 'DELETE',
     headers: headers,
   })
