@@ -3,7 +3,13 @@ import {
   getPosts,
   getPostDetail,
   editPost,
-  addPost, getPostComments, deletePost
+  addPost,
+  getPostComments,
+  deletePost,
+  votePost,
+  voteComment,
+  addComment,
+  deleteComment
 } from '../utilities/APIAccessor';
 import { generateUUID } from '../utilities/uuid'
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -12,6 +18,9 @@ export const SET_POST_DETAIL = 'SET_POST_DETAIL';
 export const SAVE_EDITED_POST = 'SAVE_EDITED_POST';
 export const SAVE_NEW_POST = 'SAVE_NEW_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const SAVE_EDITED_COMMENT = 'SAVE_EDITED_COMMENT';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
 
 function setCategories(categories) {
   return {
@@ -53,6 +62,27 @@ function deleteSelectedPost(post_id) {
   return {
     type: DELETE_POST,
     post_id,
+  }
+}
+
+function saveEditedComment(comment) {
+  return {
+    type: SAVE_EDITED_COMMENT,
+    comment,
+  }
+}
+
+function saveNewComment(comment) {
+  return {
+    type: ADD_COMMENT,
+    comment,
+  }
+}
+
+function deleteSelectedComment(comment_id) {
+  return {
+    type: DELETE_COMMENT,
+    comment_id,
   }
 }
 
@@ -153,5 +183,66 @@ export function removePost(post_id) {
       .catch(() => {
         reject();
       })
+    })
+}
+
+export function voteSelectedPost(post_id, vote) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      votePost(post_id, vote)
+        .then(post => {
+          dispatch(saveEditedPost(post));
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        })
+    })
+}
+
+export function voteSelectedComment(comment_id, vote) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      voteComment(comment_id, vote)
+        .then(comment => {
+          dispatch(saveEditedComment(comment));
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        })
+    })
+}
+
+export function createComment(post_id, comment) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      addComment({
+        ...comment,
+        id: generateUUID(),
+        timestamp: Date.now(),
+        parentId: post_id,
+      })
+        .then(comment => {
+          dispatch(saveNewComment(comment));
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        })
+    })
+}
+
+export function removeComment(comment_id) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      deleteComment(comment_id)
+        .then(() => {
+          dispatch(deleteSelectedComment(comment_id));
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        })
     })
 }

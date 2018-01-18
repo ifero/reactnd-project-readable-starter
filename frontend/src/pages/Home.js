@@ -4,12 +4,14 @@ import { fetchPosts } from "../actions/index";
 import CategoriesBar from "../components/CategoriesBar";
 import { push } from "react-router-redux";
 import PostModal from "../components/PostModal";
+import PostElement from "../components/PostElement";
 
 class Home extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       openCreatePost: false,
+      sortByDate: true,
     }
   }
 
@@ -20,34 +22,24 @@ class Home extends React.Component {
 
   render (){
     const { posts, selectedCategory, dispatch } = this.props;
-    const { openCreatePost } = this.state;
+    const { openCreatePost, sortByDate } = this.state;
     return (
       <div>
       <CategoriesBar ></CategoriesBar>
+        All Posts ordered by
+        <select default={'timestamp'} onChange={e => this.setState({sortByDate: e.target.value === 'timestamp'})}>
+          <option value={'timestamp'} label={'time'} />
+          <option value={'voteScore'} label={'vote'} />
+        </select>
         { posts && posts.filter(post => {
           if (selectedCategory) {
             return post.category === selectedCategory
           }
           return true;
-        }).map(post => (
-          <div
-            className={'post'}
-            key={post.id}
-          >
-            <div className={'postTitle'}>
-              {post.title}
-            </div>
-            <div className={'postTitle'}>
-              {post.body}
-            </div>
-            <div className={'postTitle'}>
-              {post.author}
-            </div>
-            <div className={'postTitle'}>
-              {post.category}
-            </div>
-            <div className={'open'} onClick={() => {dispatch(push(`/${post.category}/${post.id}`))}}>detail</div>
-          </div>
+        }).sort((a , b) => {
+          return sortByDate ? b.timestamp - a.timestamp : b.voteScore - a.voteScore;
+        } ).map(post => (
+          <PostElement key={post.id} post={post} onDetail={() => {dispatch(push(`/${post.category}/${post.id}`))}}/>
         ))
         }
         <div className={'open-modal'}>

@@ -86,12 +86,14 @@ class PostModal extends React.Component {
           <label>Title</label>
           <input
             className="formInput"
+            type={'text'}
             value={title}
             onChange={(e) => this.setState({title: e.target.value})}
           />
           <label>Body</label>
           <input
             className="formInput"
+            type={'text'}
             value={body}
             onChange={(e) => this.setState({body: e.target.value})}
           />
@@ -110,6 +112,7 @@ class PostModal extends React.Component {
           <label>Author</label>
           <input
             className={`formInput ${isEditingPost ? 'disabled' : ''}`}
+            type={'text'}
             value={author}
             onChange={(e) => this.setState({author: e.target.value})}
             disabled={isEditingPost}

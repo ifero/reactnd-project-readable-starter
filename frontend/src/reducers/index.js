@@ -7,6 +7,7 @@ import {
   DELETE_POST
 
 } from '../actions'
+import {DELETE_COMMENT, SAVE_EDITED_COMMENT} from "../actions/index";
 
 const initialCategoriesState = {
   categories: [],
@@ -61,6 +62,16 @@ export function postsReducer (state = initialPostsState, action) {
       return {
         ...state,
         posts: state.posts.filter(post => post.id !== action.post_id),
+      };
+    case SAVE_EDITED_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.filter(comment => comment.id !== action.comment.id).concat([action.comment]),
+      };
+    case DELETE_COMMENT:
+      return {
+        ...state,
+        comment: state.comments.filter(comment => comment.id !== action.comment_id),
       };
     default:
       return state

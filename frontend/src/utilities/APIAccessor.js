@@ -36,8 +36,8 @@ export const getPostDetail = (postId) =>
     .then(res => res.json())
     .then(data => data);
 
-export const votePost = (post, vote) =>
-  fetch(`${baseURL}/posts/${post.id}`, {
+export const votePost = (post_id, vote) =>
+  fetch(`${baseURL}/posts/${post_id}`, {
     method: 'POST',
     headers: {
       ...headers,
@@ -86,8 +86,8 @@ export const getComment = (commentID) =>
     .then(res => res.json())
     .then(data => data);
 
-export const voteComment = (comment, vote) =>
-  fetch(`${baseURL}/comments/${comment.id}`, {
+export const voteComment = (comment_id, vote) =>
+  fetch(`${baseURL}/comments/${comment_id}`, {
     method: 'POST',
     headers: {
       ...headers,

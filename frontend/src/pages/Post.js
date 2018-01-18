@@ -2,14 +2,17 @@ import React from 'react';
 import {connect} from "react-redux";
 import { fetchPostDetail, removePost } from "../actions/index";
 import { push } from 'react-router-redux';
-import moment from 'moment';
 import PostModal from '../components/PostModal';
+import PostElement from '../components/PostElement';
+import Comment from '../components/Comment';
 
 class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       openEditPost: false,
+      body: '',
+      author: '',
     }
   }
 
@@ -28,53 +31,34 @@ class Post extends React.Component {
 
   render (){
     const { post, comments } = this.props;
-    const { openEditPost } = this.state;
+    const { openEditPost, body, author } = this.state;
     return (
       <div className="container">
+        <div className={'open'} onClick={() => {this.deletePost(post.id)}}>delete</div>
         DETAILED POST:
         {post && (
-          <div
-            className={'post'}
-            key={post.id}
-          >
-            <div className={'postTitle'}>
-              {post.title}
-            </div>
-            <div className={'postTitle'}>
-              {post.body}
-            </div>
-            <div className={'postTitle'}>
-              {post.author}
-            </div>
-            <div className={'postTitle'}>
-              {post.category}
-            </div>
-            <div className={'postTitle'}>
-              {post.voteScore}
-            </div>
-            <div className={'postTitle'}>
-              {moment.unix(post.timestamp).format("DD/MM/YYYY HH:mm:ss")}
-            </div>
-            <div className={'edit'} onClick={() => {this.setState({openEditPost: true})}}>edit</div>
-          </div>
+          <PostElement key={post.id} post={post} onEdit={() => {this.setState({openEditPost: true})}} />
         )}
-        {comments && comments.map(comment => (
-          <div
-            className={'post'}
-            key={comment.id}
-          >
-            <div className={'postTitle'}>
-              {comment.body}
-            </div>
-            <div className={'postTitle'}>
-              {comment.author}
-            </div>
-            <div className={'postTitle'}>
-              {comment.voteScore}
-            </div>
-          </div>
+        {comments.length !== 0 ? 'COMMENTS:' : 'Be the first to add a comment...'}
+        {comments && comments.sort((a , b) => {
+          return b.timestamp - a.timestamp;
+        } ).map(comment => (
+          <Comment key={comment.id} comment={comment} onEdit={() => console.log("edit")} />
         ))}
-        <div className={'open'} onClick={() => {this.deletePost(post.id)}}>delete</div>
+        <label>Body</label>
+        <input
+          className="formInput"
+          type={'text'}
+          value={body}
+          onChange={(e) => this.setState({body: e.target.value})}
+        />
+        <input
+          className={`formInput ${false ? 'disabled' : ''}`}
+          type={'text'}
+          value={author}
+          onChange={(e) => this.setState({author: e.target.value})}
+          disabled={false}
+        />
         <PostModal post={post} isOpen={openEditPost} onClose={() => this.setState({openEditPost: false})} isEditingPost={true} />
       </div>
     )
