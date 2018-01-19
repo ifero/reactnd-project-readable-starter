@@ -2,7 +2,7 @@ import React from 'react';
 import moment from "moment";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { voteSelectedPost } from '../actions/index';
+import { voteSelectedPost } from '../actions/posts';
 import FaAngleUp from 'react-icons/lib/fa/angle-up';
 import FaAngleDown from 'react-icons/lib/fa/angle-down';
 import FaSearch from 'react-icons/lib/fa/search';
@@ -89,8 +89,6 @@ class PostElement extends React.Component {
     )
   }
 }
-
-
 
 PostElement.propTypes = {
   post: PropTypes.object.isRequired,

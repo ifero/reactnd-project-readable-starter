@@ -2,7 +2,7 @@ import React from 'react';
 import moment from "moment";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {removeComment, voteSelectedComment} from '../actions/index';
+import {removeComment, voteSelectedComment} from '../actions/comments';
 import FaAngleUp from 'react-icons/lib/fa/angle-up';
 import FaAngleDown from 'react-icons/lib/fa/angle-down';
 import FaTrashO from 'react-icons/lib/fa/trash-o';
@@ -75,8 +75,6 @@ class Comment extends React.Component {
     )
   }
 }
-
-
 
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,

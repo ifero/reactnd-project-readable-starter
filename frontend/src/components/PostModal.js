@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import { editSelectedPost, createPost} from '../actions/index';
+import { editSelectedPost, createPost} from '../actions/posts';
 
 const overlay = {
   overlay: {
@@ -29,7 +29,7 @@ class PostModal extends React.Component {
       title: '',
       author: '',
       body: '',
-      category: '',
+      category: 'react',
       showErrorMessage: false,
     }
   }
@@ -37,7 +37,7 @@ class PostModal extends React.Component {
 
   checkData() {
     const { title, author, body, category } = this.state;
-    const { onClose, dispatch, isEditingPost, post } = this.props;
+    const { onClose, addPost, editPost, isEditingPost, post } = this.props;
     if (title.length === 0 || author.length === 0
       || body.length === 0 || category.length === 0) {
       this.setState({showErrorMessage: true});
@@ -45,12 +45,12 @@ class PostModal extends React.Component {
     else {
       this.setState({showErrorMessage: false});
       if (isEditingPost) {
-        dispatch(editSelectedPost(post.id, title, body))
+        editPost(post.id, title, body)
           .then(() => onClose())
           .catch(() => console.log("error"));
       }
       else {
-        dispatch(createPost({title, body, author, category}))
+        addPost({title, body, author, category})
           .then(() => onClose())
           .catch(() => console.log("error"));
       }
@@ -60,16 +60,16 @@ class PostModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.post) {
       this.setState({
-        title: newProps.post.title,
-        author: newProps.post.author,
-        body: newProps.post.body,
-        category: newProps.post.category,
+        title: newProps.post.title || '',
+        author: newProps.post.author || '',
+        body: newProps.post.body || '',
+        category: newProps.post.category || 'react',
       })
     }
   }
 
   render(){
-    const { title, author, body, category, showErrorMessage } = this.state;
+    const { title, author, body, showErrorMessage } = this.state;
     const { isOpen, onClose, categories, isEditingPost } = this.props;
     return (
       <Modal
@@ -100,7 +100,7 @@ class PostModal extends React.Component {
           <label>Category</label>
           <select
             className="inputCategory"
-            default={category}
+            default={'react'}
             onChange={(e) => this.setState({category: e.target.value})}
             disabled={isEditingPost}
           >
@@ -128,10 +128,17 @@ class PostModal extends React.Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    addPost: post => dispatch(createPost(post)),
+    editPost: (post_id, title, body) => dispatch(editSelectedPost(post_id, title, body)),
+  }
+}
+
 function mapStateToProps(state) {
   return {
     categories: state.categoriesReducer.categories,
   }
 }
 
-export default connect(mapStateToProps)(PostModal)
+export default connect(mapStateToProps, mapDispatchToProps)(PostModal)

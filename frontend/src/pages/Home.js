@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { fetchPosts } from "../actions/index";
+import { fetchPosts } from "../actions/posts";
 import { push } from "react-router-redux";
 import PostModal from "../components/PostModal";
 import PostElement from "../components/PostElement";
@@ -15,12 +15,12 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchPosts());
+    const { getPosts } = this.props;
+    getPosts();
   }
 
   render (){
-    const { posts, selectedCategory, dispatch } = this.props;
+    const { posts, selectedCategory, pushPath } = this.props;
     const { openCreatePost, sortByDate } = this.state;
     return (
       <div>
@@ -37,7 +37,7 @@ class Home extends React.Component {
         }).sort((a , b) => {
           return sortByDate ? b.timestamp - a.timestamp : b.voteScore - a.voteScore;
         } ).map(post => (
-          <PostElement key={post.id} post={post} onDetail={() => {dispatch(push(`/${post.category}/${post.id}`))}}/>
+          <PostElement key={post.id} post={post} onDetail={() => {pushPath(`/${post.category}/${post.id}`)}}/>
         ))
         }
         <div className={'open-modal'}>
@@ -49,6 +49,13 @@ class Home extends React.Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    pushPath: path => dispatch(push(path)),
+    getPosts: () => dispatch(fetchPosts()),
+  }
+}
+
 function mapStateToProps(state, ownProps) {
   return {
     categories: state.categoriesReducer.categories,
@@ -57,4 +64,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

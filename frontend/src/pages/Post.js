@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { fetchPostDetail, removePost, createComment, editSelectedComment } from "../actions/index";
+import { fetchPostDetail, removePost } from '../actions/posts';
+import { createComment, editSelectedComment } from "../actions/comments";
 import { push } from 'react-router-redux';
 import PostModal from '../components/PostModal';
 import PostElement from '../components/PostElement';
@@ -16,19 +17,23 @@ class Post extends React.Component {
       editComment: false,
       showErrorMessage: false,
       comment_id: '',
+      show404: false,
     }
   }
 
   componentWillMount() {
-    const { id, dispatch } = this.props;
-    dispatch(fetchPostDetail(id));
+    const { id, fetchPost } = this.props;
+    fetchPost(id)
+      .catch(() => {
+        this.setState({show404: true});
+    });
   }
 
   deletePost(post_id) {
-    const { dispatch } = this.props;
-    dispatch(removePost(post_id))
+    const { delPost, pushPath } = this.props;
+    delPost(post_id)
       .then(() => {
-        dispatch(push('/'));
+        pushPath('/');
       })
   }
 
@@ -38,19 +43,19 @@ class Post extends React.Component {
 
   saveComment() {
     const { editComment, body, author, comment_id } = this.state;
-    const { dispatch, post } = this.props;
+    const { post, editTheComment, addComment } = this.props;
     if (author.length === 0 || body.length === 0) {
       this.setState({showErrorMessage: true});
     }
     else {
       this.setState({showErrorMessage: false});
       if (editComment) {
-        dispatch(editSelectedComment(comment_id, body))
+        editTheComment(comment_id, body)
           .then(() => this.clearInputs())
           .catch(() => console.log("error"));
       }
       else {
-        dispatch(createComment(post.id, {body, author}))
+        addComment(post.id, {body, author})
           .then(() => this.clearInputs())
           .catch(() => console.log("error"));
       }
@@ -63,10 +68,11 @@ class Post extends React.Component {
 
   render (){
     const { post, comments } = this.props;
-    const { openEditPost, body, author, editComment, showErrorMessage } = this.state;
+    const { openEditPost, body, author, editComment, showErrorMessage, show404 } = this.state;
     return (
       <div className="container">
-        {post && (
+        {show404 && (<div className={"post nothingToSee "}>404</div>)}
+        {!show404 && post && (
           <PostElement
             key={post.id}
             post={post}
@@ -74,13 +80,13 @@ class Post extends React.Component {
             onDelete={() => {this.deletePost(post.id)}}
           />
         )}
-        {comments.length !== 0 ? 'COMMENTS:' : 'Be the first to add a comment...'}
-        {comments && comments.sort((a , b) => {
+        {show404 ? null : comments.length !== 0 ? 'COMMENTS:' : 'Be the first to add a comment...'}
+        {!show404 && comments && comments.sort((a , b) => {
           return a.timestamp - b.timestamp;
         } ).map(comment => (
           <Comment key={comment.id} comment={comment} onEdit={() => this.editCommentMode(comment)} />
         ))}
-        <div className={'newComment'}>
+        {!show404 && (<div className={'newComment'}>
           <label>comment:</label>
           <textarea
             placeholder={'Type in your comment'}
@@ -106,19 +112,29 @@ class Post extends React.Component {
           <div className={`errorMessage ${showErrorMessage ? '' : 'hide'}`}>
             <label>Some params are missing</label>
           </div>
-        </div>
+        </div>)}
         <PostModal post={post} isOpen={openEditPost} onClose={() => this.setState({openEditPost: false})} isEditingPost={true} />
       </div>
     )
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchPost: post_id => dispatch(fetchPostDetail(post_id)),
+    delPost: post_id => dispatch(removePost(post_id)),
+    pushPath: path => dispatch(push(path)),
+    editTheComment: (comment_id, body) => dispatch(editSelectedComment(comment_id, body)),
+    addComment: (post_id, comment) => dispatch(createComment(post_id, comment)),
+  }
+}
+
 function mapStateToProps(state, ownProps) {
   return {
     post: state.postsReducer.post,
-    comments: state.postsReducer.comments,
+    comments: state.commentsReducer.comments,
     id: ownProps.match.params.post_id,
   };
 }
 
-export default connect(mapStateToProps)(Post);
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

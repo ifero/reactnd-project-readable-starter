@@ -155,3 +155,8 @@
 .category {
     margin: 0 5px;
 }
+
+.nothingToSee {
+    background-color: transparent;
+    font-size: 250px;
+}

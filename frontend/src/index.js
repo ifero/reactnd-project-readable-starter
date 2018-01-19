@@ -5,7 +5,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
 import { routerReducer, routerMiddleware, ConnectedRouter } from 'react-router-redux';
-import { categoriesReducer, postsReducer } from './reducers';
+import { categoriesReducer, commentsReducer, postsReducer} from './reducers';
 import Home from "./pages/Home";
 import {Route} from "react-router";
 import "./styles.css"
@@ -15,6 +15,7 @@ import CategoriesBar from "./components/CategoriesBar";
 
 const reducer = combineReducers({
   categoriesReducer,
+  commentsReducer,
   postsReducer,
   router: routerReducer,
 });
