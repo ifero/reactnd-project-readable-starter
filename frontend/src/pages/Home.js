@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { fetchPosts } from "../actions/posts";
+import {fetchPosts, removePost} from "../actions/posts";
 import { push } from "react-router-redux";
 import PostModal from "../components/PostModal";
 import PostElement from "../components/PostElement";
@@ -20,7 +20,7 @@ class Home extends React.Component {
   }
 
   render (){
-    const { posts, selectedCategory, pushPath } = this.props;
+    const { posts, selectedCategory, pushPath, delPost } = this.props;
     const { openCreatePost, sortByDate } = this.state;
     return (
       <div>
@@ -37,7 +37,12 @@ class Home extends React.Component {
         }).sort((a , b) => {
           return sortByDate ? b.timestamp - a.timestamp : b.voteScore - a.voteScore;
         } ).map(post => (
-          <PostElement key={post.id} post={post} onDetail={() => {pushPath(`/${post.category}/${post.id}`)}}/>
+          <PostElement
+            key={post.id}
+            post={post}
+            onDetail={() => {pushPath(`/${post.category}/${post.id}`)}}
+            onDelete={() => {delPost(post.id)}}
+          />
         ))
         }
         <div className={'open-modal'}>
@@ -53,6 +58,7 @@ function mapDispatchToProps(dispatch) {
   return {
     pushPath: path => dispatch(push(path)),
     getPosts: () => dispatch(fetchPosts()),
+    delPost: post_id => dispatch(removePost(post_id)),
   }
 }
 

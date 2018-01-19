@@ -67,11 +67,18 @@ class Post extends React.Component {
   }
 
   render (){
-    const { post, comments } = this.props;
+    const { post, comments, pushPath } = this.props;
     const { openEditPost, body, author, editComment, showErrorMessage, show404 } = this.state;
     return (
       <div className="container">
-        {show404 && (<div className={"post nothingToSee "}>404</div>)}
+        {show404 && (
+          <div className={"fhf"}>
+            <div className={'big-font'}>404</div>
+            <button
+              className={'icon-btn'}
+              onClick={() => pushPath('/')}
+            >go home</button>
+          </div>)}
         {!show404 && post && (
           <PostElement
             key={post.id}

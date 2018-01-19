@@ -55,6 +55,13 @@ class PostElement extends React.Component {
             >
               edit <FaEdit />
             </button>)}
+          {onDelete && !onEdit && (
+            <button
+              className={'icon-btn'}
+              onClick={onDelete}
+            >
+              <FaTrashO size={18}/>
+            </button>)}
           <button
             className={'icon-btn'}
             onClick={() => this.votePost('upVote')}
@@ -77,7 +84,7 @@ class PostElement extends React.Component {
             >
               details <FaSearch size={12} />
             </button>)}
-          {onDelete && (
+          {onDelete && !onDetail && (
             <button
               className={'icon-btn'}
               onClick={onDelete}
